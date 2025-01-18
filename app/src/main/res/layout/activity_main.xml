@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteY="1dp"
+            tools:layout_editor_absoluteX="1dp"
+            android:gravity="center_horizontal"
+            android:paddingTop="40dp"
+            android:background="#030F16">
+
+        <ImageView
+                android:layout_width="450dp"
+                android:layout_height="152dp"
+                app:srcCompat="@drawable/logo"
+                android:id="@+id/imageView" />
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+        <Button
+                android:text="Nová hra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button"
+                android:background="#00000000"
+                android:textColor="#109AE4"
+                android:textSize="34sp"
+                android:textAllCaps="false"
+                android:fontFamily="@font/silkscreen_bold"
+                android:onClick="new_game"
+                android:textStyle="bold" />
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="19dp" />
+
+        <Button
+                android:text="Pokracovat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button2"
+                android:background="#00000000"
+                android:textColor="#109AE4"
+                android:textSize="30sp"
+                android:textAllCaps="false"
+                android:fontFamily="@font/silkscreen"
+                android:onClick="continue_last_save" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
