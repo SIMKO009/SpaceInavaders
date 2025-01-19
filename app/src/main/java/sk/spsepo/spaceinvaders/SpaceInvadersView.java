@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -43,6 +42,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     private int maxInvaderBullets = 50;
     private Invader[] invaders = new Invader[30];
     private int numInvaders = 0, score = 0;
+    private int final_score = 0;
     private DefenceBrick[] bricks = new DefenceBrick[200];
     private int numBricks;
 
@@ -65,6 +65,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     private long lastShotTime = 0;
     private static final long RELOAD_TIME = 700; // Reload time in milliseconds
 
+    private boolean gameOver = false;
 
     public SpaceInvadersView(Context context, int x, int y, boolean continueGame) {
         super(context);
@@ -96,13 +97,14 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
         if (continueGame) {
             loadGameState();
         } else {
-            prepareLevel();
+            prepareLevel(false);
         }
     }
 
-    private void prepareLevel() {
+    private void prepareLevel(boolean over) {
         paused = true;
         lives = INIT_LIVES;
+        final_score = score;
         score = 0;
         numBullets = 0;
 
@@ -122,6 +124,13 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                     bricks[numBricks++] = new DefenceBrick(row, column, shelterNumber, screenX, screenY);
 
         menaceInterval = 1000;
+
+        if (over) {
+            gameOver = true;
+            paused = true;
+        } else {
+            gameOver = false;
+        }
     }
 
     private void saveGameState() {
@@ -211,7 +220,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             menaceInterval = menaceInterval - 80;
         }
 
-        if (lost) prepareLevel();
+        if (lost) prepareLevel(true);
 
         for (Bullet bullet: playerBullets) {
             if (bullet.getImpactPointY() < 0)
@@ -232,7 +241,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                         soundPool.play(invaderExplodeID, 1, 1, 0, 0, 1);
                         score = score + INCREASE;
                         if (score == numInvaders * INCREASE) {
-                            prepareLevel();
+                            prepareLevel(false);
                             break;
                         }
                     }
@@ -262,7 +271,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                     lives--;
                     soundPool.play(playerExplodeID, 1, 1, 0, 0, 1);
                     if (lives == 0)
-                        prepareLevel();
+                        prepareLevel(true);
                 }
         }
     }
@@ -270,48 +279,62 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
     private void draw() {
         if (ourHolder.getSurface().isValid()) {
             canvas = ourHolder.lockCanvas();
+            canvas.drawColor(Color.rgb(0, 0, 0));
 
+            if (gameOver) {
+                paint.setColor(Color.argb(255, 255, 255, 255));
+                paint.setTextSize(120);
+                paint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.BOLD));
+                canvas.drawText("Prehral si!", screenX / 2 - 350, screenY / 2 - 100, paint);
+                paint.setTextSize(50);
+                canvas.drawText("Tvoje skóre: " + final_score, screenX / 2 - 200, screenY / 2 + 100, paint);
+                canvas.drawText("Stlač pre novú hru", screenX / 2 - 240, screenY / 2 + 250, paint);
+            } else {
+                paint.setColor(Color.argb(255, 255, 255, 255));
+                canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - 135, paint);
+                for (int i = 0; i < numInvaders; i++) {
+                    if (invaders[i].getVisibility()) {
+                        if (uhOrOh) {
+                            canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getX(), invaders[i].getY(), paint);
+                        } else {
+                            canvas.drawBitmap(invaders[i].getBitmap2(), invaders[i].getX(), invaders[i].getY(), paint);
+                        }
+                    }
+                }
+                for (int i = 0; i < numBricks; i++) {
+                    if (bricks[i].getVisibility()) {
+                        canvas.drawRect(bricks[i].getRect(), paint);
+                    }
+                }
+                for (int i = 0; i < playerBullets.length; i++) {
+                    Bullet bullet = playerBullets[i];
+                    if (bullet.getStatus()) {
+                        canvas.drawRect(bullet.getRect(), paint);
+                    }
+                }
+                for (int i = 0; i < invadersBullets.length; i++) {
+                    if (invadersBullets[i].getStatus()) {
+                        canvas.drawRect(invadersBullets[i].getRect(), paint);
+                    }
+                }
 
+                paint.setColor(Color.argb(255, 255, 255, 255));
+                paint.setTextSize(50);
+                paint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
+                canvas.drawText("SKÓRE: " + score, 10, 55, paint);
+                for (int i = 0; i < lives; i++) {
+                    int left = (screenX - (lives * 50 + (lives - 1) * 10)) / 2 + i * (50 + 10);
+                    int right = left + 50;
+                    canvas.drawRect(left, 15, right, 60, paint);
+                }
 
-            canvas.drawColor(Color.rgb( 0, 0, 0));
-
-            paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - 135, paint);
-            for (int i = 0; i < numInvaders; i++)
-                if (invaders[i].getVisibility())
-                    if (uhOrOh)
-                        canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getX(), invaders[i].getY(), paint);
-                    else
-                        canvas.drawBitmap(invaders[i].getBitmap2(), invaders[i].getX(), invaders[i].getY(), paint);
-            for (int i = 0; i < numBricks; i++)
-                if (bricks[i].getVisibility())
-                    canvas.drawRect(bricks[i].getRect(), paint);
-            for (int i = 0; i < playerBullets.length; i++) {
-                Bullet bullet = playerBullets[i];
-                if (bullet.getStatus())
-                    canvas.drawRect(bullet.getRect(), paint);
+                paint.setColor(Color.rgb(255, 255, 255));
+                canvas.drawRect(screenX - 100, 0, screenX, 100, paint);
+                paint.setColor(Color.rgb(0, 0, 0));
+                paint.setTextSize(50);
+                paint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.BOLD));
+                canvas.drawText("||", screenX - 80, 60, paint);
             }
-            for (int i = 0; i < invadersBullets.length; i++)
-                if (invadersBullets[i].getStatus())
-                    canvas.drawRect(invadersBullets[i].getRect(), paint);
-
-            paint.setColor(Color.argb(255, 255, 255, 255));
-            paint.setTextSize(50);
-            paint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
-            canvas.drawText("SKÓRE: " + score , 10, 55, paint);
-            for (int i = 0; i < lives; i++) {
-                int left = (screenX - (lives * 50 + (lives - 1) * 10)) / 2 + i * (50 + 10);
-                int right = left + 50;
-                canvas.drawRect(left, 15, right, 60, paint);
-            }
-
-            paint.setColor(Color.rgb(255, 255, 255));
-            canvas.drawRect(screenX - 100, 0, screenX, 100, paint);
-            paint.setColor(Color.rgb(0, 0, 0));
-            paint.setTextSize(50);
-            paint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.BOLD));
-            canvas.drawText("||", screenX - 80, 60, paint);
-
             ourHolder.unlockCanvasAndPost(canvas);
         }
     }
@@ -352,6 +375,13 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 case MotionEvent.ACTION_MOVE:
                 case MotionEvent.ACTION_DOWN:
                     paused = false;
+                    if (gameOver) {
+                        // Restart the game if it's over
+                        gameOver = false;
+                        prepareLevel(false);
+                        paused = false;
+                        break;
+                    }
                     if (motionEvent.getX() > screenX - 100 && motionEvent.getY() < 100) {
                         paused = true;
                         saveGameState();
