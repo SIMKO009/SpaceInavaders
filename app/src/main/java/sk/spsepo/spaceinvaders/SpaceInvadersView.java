@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
@@ -56,7 +57,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
 
     // score increase per kill and initial lives
     private final int INCREASE = 10;
-    private final int INIT_LIVES = 20;
+    private final int INIT_LIVES = 10;
     private int lives = INIT_LIVES;
 
     // how menacing should the sound be
@@ -308,11 +309,29 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             for (int i = 0; i < invadersBullets.length; i++)
                 if (invadersBullets[i].getStatus())
                     canvas.drawRect(invadersBullets[i].getRect(), paint);
+
             // draw the score and remaining lives
-            paint.setColor(Color.argb(255, 249, 129, 0));
-            paint.setTextSize(40);
-            canvas.drawText("Score: " + score + "   Lives: " + lives, 10, 50, paint);
-            // draw everything to the screen
+            paint.setColor(Color.argb(255, 255, 255, 255));
+            paint.setTextSize(50);
+            paint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
+            canvas.drawText("SKÓRE: " + score , 10, 55, paint);
+            for (int i = 0; i < lives; i++) {
+                int left = (screenX - (lives * 50 + (lives - 1) * 10)) / 2 + i * (50 + 10);  // Add width + spacing for each rectangle
+                int right = left + 50;             // Add the rectangle's width
+                canvas.drawRect(left, 15, right, 60, paint);
+            }
+
+
+            // PAUSE BUTTON
+            paint.setColor(Color.rgb(255, 255, 255));
+            canvas.drawRect(screenX - 100, 0, screenX, 100, paint);
+            paint.setColor(Color.rgb(0, 0, 0));
+            paint.setTextSize(50);
+            paint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.BOLD));
+            canvas.drawText("||", screenX - 80, 60, paint);
+
+
+
             ourHolder.unlockCanvasAndPost(canvas);
         }
     }
@@ -355,7 +374,11 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
                 case MotionEvent.ACTION_MOVE:
                 case MotionEvent.ACTION_DOWN:
                     paused = false;
-                    // if touch is above bottom eigth, interpret as movement
+                    if (motionEvent.getX() > screenX - 100 && motionEvent.getY() < 100) {
+                        paused = true;
+                        break;
+                    }
+
                     if (motionEvent.getY() > screenY * 3 / 4)
                         if (motionEvent.getX() > screenX / 2)
                             playerShip.setMovementState(playerShip.RIGHT);

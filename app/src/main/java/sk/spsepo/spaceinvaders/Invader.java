@@ -39,15 +39,16 @@ public class Invader {
 
         rect = new RectF();
 
-        length = screenX / 20;
-        height = screenY / 20;
+        length = screenX / 27;
+        height = screenY / 27;
 
         isVisible = true;
 
-        int padding = screenX / 25;
+        int paddingX = screenX / 25;
+        int paddingY = 90; // Add padding for the y coordinate
 
-        x = column * (length + padding);
-        y = row * (length + padding/4);
+        x = column * (length + paddingX);
+        y = row * (length + paddingX / 4) + paddingY;
 
         // initialize the bitmap
         bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.invader1);
@@ -59,13 +60,13 @@ public class Invader {
                 (int) (height),
                 false);
 
-        // stretch the first bitmap to a size appropriate for the screen resolution
+        // stretch the second bitmap to a size appropriate for the screen resolution
         bitmap2 = Bitmap.createScaledBitmap(bitmap2,
                 (int) (length),
                 (int) (height),
                 false);
 
-        shipSpeed = 40;
+        shipSpeed = 50;
     }
 
     public void setInvisible(){
