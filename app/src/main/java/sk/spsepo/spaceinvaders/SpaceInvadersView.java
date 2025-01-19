@@ -286,7 +286,7 @@ public class SpaceInvadersView extends SurfaceView implements Runnable {
             canvas.drawColor(Color.argb(255, 26, 128, 182));
             paint.setColor(Color.argb(255, 255, 255, 255));
             // draw the player spaceship
-            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - 50, paint);
+            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - 135, paint);
             // draw the invaders
             for (int i = 0; i < numInvaders; i++)
                 if (invaders[i].getVisibility())
