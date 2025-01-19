@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".tutorial"
+        android:background="#010101"
+        android:scrollbars="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="always">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:paddingLeft="40dp"
+            android:layout_height="match_parent">
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="37dp" />
+
+        <TextView
+                android:text="Tutorial"
+                android:layout_width="441dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/button"
+                android:background="#00000000"
+                android:textColor="#ffe200"
+                android:textSize="34sp"
+                android:textAllCaps="false"
+                android:fontFamily="@font/silkscreen_bold"
+                android:textStyle="bold" />
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="25dp" />
+
+        <TextView
+                android:text="Cieľom hry Space Invaders je ovládať loď, zničiť mimozemšťanov a zabrániť im dosiahnuť spodok obrazovky.\n\nZískavate body za zničenie mimozemšťanov, no dávajte pozor, aby vás nezasiahli alebo sa nedostali príliš blízko.\n\nSledujte ich pohyb, strieľajte presne a ochráňte vesmír!\n\nPohyb lode je možné ovládať kliknutím na obrazovku na úrovni lode – kliknite na stranu, na ktorú sa má loď posunúť.\n\nStrieľanie sa vykonáva kliknutím nad úroveň ochranných bariér, čo umožňuje presné mierenie na mimozemšťanov.\n\n"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button3"
+                android:background="#00000000"
+                android:textColor="#ffe200"
+                android:textSize="25sp"
+                android:textAllCaps="false"
+                android:fontFamily="monospace">
+
+        </TextView>
+    </LinearLayout>
+</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

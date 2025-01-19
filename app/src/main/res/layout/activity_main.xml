@@ -6,7 +6,8 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        android:background="#010101">
 
     <ImageView
             android:layout_width="match_parent"
@@ -14,7 +15,8 @@
             app:srcCompat="@drawable/space"
             android:id="@+id/imageView2"
             android:scaleType="fitCenter"
-            android:scaleX="2" />
+            android:scaleX="3"
+            android:scaleY="2" />
 
     <LinearLayout
             android:orientation="vertical"
@@ -23,7 +25,7 @@
             tools:layout_editor_absoluteY="1dp"
             tools:layout_editor_absoluteX="1dp"
             android:gravity="center_horizontal"
-            android:paddingTop="40dp"
+            android:paddingTop="30dp"
             android:background="#00000000">
 
         <ImageView
@@ -47,11 +49,12 @@
                 android:textAllCaps="false"
                 android:fontFamily="@font/silkscreen_bold"
                 android:onClick="new_game"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:typeface="monospace" />
 
         <Space
                 android:layout_width="match_parent"
-                android:layout_height="19dp" />
+                android:layout_height="wrap_content" />
 
         <Button
                 android:text="Pokracovat"
@@ -62,7 +65,22 @@
                 android:textColor="#ffe200"
                 android:textSize="30sp"
                 android:textAllCaps="false"
-                android:fontFamily="@font/silkscreen"
-                android:onClick="continue_last_save" />
+                android:fontFamily="@font/silkscreen_ttf"
+                android:onClick="continue_last_save"
+                android:typeface="monospace" />
+
+        <Button
+                android:text="tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tutorial"
+                android:background="#00000000"
+                android:textColor="#ffe200"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                android:fontFamily="@font/silkscreen_ttf"
+                android:onClick="show_tutorial"
+                android:typeface="monospace" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

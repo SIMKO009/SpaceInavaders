@@ -37,4 +37,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("continue", true);
         startActivity(intent);
     }
+
+    public void show_tutorial(View view) {
+        Intent intent = new Intent(this, tutorial.class);
+        startActivity(intent);
+    }
 }
