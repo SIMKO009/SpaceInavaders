@@ -25,11 +25,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void new_game(View view) {
-        //switch to activity_space_invaders.xml
+        // switch to activity_space_invaders.xml with new game parameter
         Intent intent = new Intent(this, SpaceInvadersActivity.class);
+        intent.putExtra("continue", false);
         startActivity(intent);
     }
 
     public void continue_last_save(View view) {
+        // switch to activity_space_invaders.xml with continue game parameter
+        Intent intent = new Intent(this, SpaceInvadersActivity.class);
+        intent.putExtra("continue", true);
+        startActivity(intent);
     }
 }

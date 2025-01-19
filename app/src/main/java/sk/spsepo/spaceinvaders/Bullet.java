@@ -22,7 +22,6 @@ public class Bullet {
     private int height;
 
     private boolean isActive;
-
     public Bullet(int screenY) {
 
         height = screenY / 30;
@@ -43,6 +42,7 @@ public class Bullet {
         isActive = false;
     }
 
+
     public float getImpactPointY(){
         if (heading == DOWN)
             return y + height;
@@ -51,6 +51,7 @@ public class Bullet {
     }
 
     public boolean shoot(float startX, float startY, int direction) {
+
         if (!isActive) {
             x = startX;
             y = startY;

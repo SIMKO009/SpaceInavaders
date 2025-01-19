@@ -13,18 +13,13 @@ public class Invader {
 
     Random generator = new Random();
 
-    // the player ship will be represented by a Bitmap
     private Bitmap bitmap1;
     private Bitmap bitmap2;
 
-    // how long and high the paddle will be
     private float length;
     private float height;
 
-    // x coordinate of the far left
     private float x;
-
-    // y coordinate of the top
     private float y;
 
     private float shipSpeed;
@@ -35,6 +30,7 @@ public class Invader {
     private int shipMoving = RIGHT;
 
     boolean isVisible;
+
     public Invader(Context context, int row, int column, int screenX, int screenY) {
 
         rect = new RectF();
@@ -45,26 +41,16 @@ public class Invader {
         isVisible = true;
 
         int paddingX = screenX / 25;
-        int paddingY = 90; // Add padding for the y coordinate
+        int paddingY = 90;
 
         x = column * (length + paddingX);
         y = row * (length + paddingX / 4) + paddingY;
 
-        // initialize the bitmap
         bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.invader1);
         bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.invader2);
 
-        // stretch the first bitmap to a size appropriate for the screen resolution
-        bitmap1 = Bitmap.createScaledBitmap(bitmap1,
-                (int) (length),
-                (int) (height),
-                false);
-
-        // stretch the second bitmap to a size appropriate for the screen resolution
-        bitmap2 = Bitmap.createScaledBitmap(bitmap2,
-                (int) (length),
-                (int) (height),
-                false);
+        bitmap1 = Bitmap.createScaledBitmap(bitmap1, (int) (length), (int) (height), false);
+        bitmap2 = Bitmap.createScaledBitmap(bitmap2, (int) (length), (int) (height), false);
 
         shipSpeed = 50;
     }
@@ -89,12 +75,12 @@ public class Invader {
         return bitmap2;
     }
 
-    public float getX(){
-        return x;
+    public int getX(){
+        return (int) x;
     }
 
-    public float getY(){
-        return y;
+    public int getY(){
+        return (int) y;
     }
 
     public float getLength(){
@@ -107,12 +93,12 @@ public class Invader {
         if(shipMoving == RIGHT)
             x = x + shipSpeed / fps;
 
-        // update rect which is used to detect hits
         rect.top = y;
         rect.bottom = y + height;
         rect.left = x;
         rect.right = x + length;
     }
+
     public void dropDownAndReverse(){
         if(shipMoving == LEFT)
             shipMoving = RIGHT;
@@ -123,23 +109,34 @@ public class Invader {
 
         shipSpeed = shipSpeed * 1.18f;
     }
+
     public boolean takeAim(float playerShipX, float playerShipLength){
 
         int randomNumber = -1;
-        // if invader is near the player
         if((playerShipX + playerShipLength > x && playerShipX + playerShipLength < x + length) ||
                 (playerShipX > x && playerShipX < x + length)) {
-            // 1 in 150 chance to shoot
-            randomNumber = generator.nextInt(150);
+            randomNumber = generator.nextInt(40);
             if(randomNumber == 0)
                 return true;
         }
 
-        // if firing randomly (not near the player) a 1 in 2000 chance
-        randomNumber = generator.nextInt(2000);
+        randomNumber = generator.nextInt(750);
         if(randomNumber == 0)
             return true;
         else
             return false;
+    }
+
+    // Add the following methods for saving and loading state
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public void setVisibility(boolean isVisible) {
+        this.isVisible = isVisible;
     }
 }

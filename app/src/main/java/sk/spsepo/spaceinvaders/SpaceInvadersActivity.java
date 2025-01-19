@@ -1,37 +1,33 @@
 package sk.spsepo.spaceinvaders;
 
 import android.app.Activity;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.view.Display;
 
 public class SpaceInvadersActivity extends Activity {
 
-    SpaceInvadersView spaceInvadersView;
+    private SpaceInvadersView spaceInvadersView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // get a Display object to access screen details
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        spaceInvadersView = new SpaceInvadersView(this, size.x, size.y);
+
+        // Get the parameter from MainActivity
+        boolean continueGame = getIntent().getBooleanExtra("continue", false);
+
+        // Initialize SpaceInvadersView with the parameter
+        spaceInvadersView = new SpaceInvadersView(this, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels, continueGame);
         setContentView(spaceInvadersView);
     }
 
-    // This method executes when the player starts the game
-    @Override
-    protected void onResume() {
-        super.onResume();
-        spaceInvadersView.resume();
-    }
-
-    // This method executes when the player quits the game
     @Override
     protected void onPause() {
         super.onPause();
         spaceInvadersView.pause();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        spaceInvadersView.resume();
+    }
 }
